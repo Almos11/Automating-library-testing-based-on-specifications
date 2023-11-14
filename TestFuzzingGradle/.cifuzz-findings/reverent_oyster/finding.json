@@ -1,0 +1,53 @@
+{
+  "Origin": "",
+  "name": "reverent_oyster",
+  "type": "CRASH",
+  "input_data": "QGphei5aZXL/CP8tJycALSc=",
+  "logs": [
+    "== Java Exception: com.code_intelligence.jazzer.api.FuzzerSecurityIssueHigh: Remote Code Execution",
+    "Unrestricted class/object creation based on externally controlled data may allow",
+    "remote code execution depending on available classes on the classpath.",
+    "\tat jaz.Zer.reportFinding(Zer.java:108)",
+    "\tat jaz.Zer.reportFindingIfEnabled(Zer.java:103)",
+    "\tat jaz.Zer.\u003cinit\u003e(Zer.java:76)",
+    "\tat java.base/jdk.internal.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)",
+    "\tat java.base/jdk.internal.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:77)",
+    "\tat java.base/jdk.internal.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)",
+    "\tat java.base/java.lang.reflect.Constructor.newInstanceWithCaller(Constructor.java:499)",
+    "\tat java.base/java.lang.reflect.ReflectAccess.newInstance(ReflectAccess.java:128)",
+    "\tat java.base/jdk.internal.reflect.ReflectionFactory.newInstance(ReflectionFactory.java:347)",
+    "\tat java.base/java.lang.Class.newInstance(Class.java:645)",
+    "\tat org.example.ExploreMe.exploreMe(ExploreMe.java:19)",
+    "\tat org.example.MyClassFuzzTest1.myFuzzTest(MyClassFuzzTest1.java:14)",
+    "== libFuzzer crashing input ==",
+    "MS: 2 CMP-Custom- DE: \"jaz.Zer\"-; base unit: 5b2ad07697b4d20e4cf5f647a60d4db8c6a22dfc",
+    "0x40,0x6a,0x61,0x7a,0x2e,0x5a,0x65,0x72,0xff,0x8,0xff,0x2d,0x27,0x27,0x0,0x2d,0x27,",
+    "@jaz.Zer\\377\\010\\377-''\\000-'",
+    "artifact_prefix='/tmp/jazzer-out-404681349/'; Test unit written to ../../../../../.cifuzz-findings/reverent_oyster/crashing-input",
+    "Base64: QGphei5aZXL/CP8tJycALSc=",
+    "Done 107436 runs in 0 second(s)"
+  ],
+  "details": "Security Issue: Remote Code Execution",
+  "more_details": {
+    "id": "remote_code_execution"
+  },
+  "created_at": "2023-11-14T21:48:13.258272543+03:00",
+  "input_file": ".cifuzz-findings/reverent_oyster/crashing-input",
+  "stack_trace": [
+    {
+      "SourceFile": "src/main/java/org/example/ExploreMe.java",
+      "Line": 19,
+      "Column": 0,
+      "FrameNumber": 0,
+      "Function": "org.example.ExploreMe.exploreMe"
+    },
+    {
+      "SourceFile": "src/test/java/org/example/MyClassFuzzTest1.java",
+      "Line": 14,
+      "Column": 0,
+      "FrameNumber": 0,
+      "Function": "org.example.MyClassFuzzTest1.myFuzzTest"
+    }
+  ],
+  "fuzz_test": "org.example.MyClassFuzzTest1"
+}

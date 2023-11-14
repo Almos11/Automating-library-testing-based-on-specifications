@@ -1,0 +1,40 @@
+{
+  "Origin": "",
+  "name": "majestic_tarantula",
+  "type": "WARNING",
+  "logs": [
+    "== Java Exception: java.lang.ArithmeticException: / by zero",
+    "\tat org.example.MySimpleBag.mySimpleBag(MySimpleBag.java:5)",
+    "\tat org.example.MyClassFuzzTest2.myFuzzTest(MyClassFuzzTest2.java:12)",
+    "== libFuzzer crashing input ==",
+    "MS: 0 ; base unit: 0000000000000000000000000000000000000000",
+    "",
+    "",
+    "artifact_prefix='/tmp/jazzer-out-314291202/'; Test unit written to ../../../../../.cifuzz-findings/majestic_tarantula/crashing-input",
+    "Base64: ",
+    "Done 1 runs in 0 second(s)"
+  ],
+  "details": "java.lang.ArithmeticException: / by zero",
+  "more_details": {
+    "id": "java_exception"
+  },
+  "created_at": "2023-11-14T22:12:58.52497785+03:00",
+  "input_file": ".cifuzz-findings/majestic_tarantula/crashing-input",
+  "stack_trace": [
+    {
+      "SourceFile": "src/main/java/org/example/MySimpleBag.java",
+      "Line": 5,
+      "Column": 0,
+      "FrameNumber": 0,
+      "Function": "org.example.MySimpleBag.mySimpleBag"
+    },
+    {
+      "SourceFile": "src/test/java/org/example/MyClassFuzzTest2.java",
+      "Line": 12,
+      "Column": 0,
+      "FrameNumber": 0,
+      "Function": "org.example.MyClassFuzzTest2.myFuzzTest"
+    }
+  ],
+  "fuzz_test": "org.example.MyClassFuzzTest2"
+}
