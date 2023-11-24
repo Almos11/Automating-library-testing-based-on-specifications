@@ -2,27 +2,29 @@ public class MyClass {
 
     // states
     /*
-    state calculate_sum; - state == 1
-    state calculate_diff; - state == 2
-    state calculate_division; - state == 3
+    initstate created; - state == 0
+    state sum; - state == 1
+    state diff; - state == 2
+    state division; - state == 3
     finishstate closed; - state == 4 - финальное состояние
      */
 
     // shifts
     /*
-    state == 0: init state
-    state == 1: 0 (to_start), 1 (get_sum), 2 (next)
-    state == 2: 0 (to_start), 2 (calculate_diff), 3 (next)
-    state == 3: 2 (back), 3 (get_division), 4 (end)
-    state == 4: - finish state
+    created == 0: 0 (get_state), 1 (next)
+    sum == 1: 0 (to_start), 1 (get_sum, get_state), 2 (next)
+    diff == 2: 0 (to_start), 2 (diff, get_state), 3 (next)
+    division == 3: 2 (back), 3 (get_division, get_state), 4 (end)
+    closed == 4: - finish state
      */
 
-    // fun of shifts
+    // func of shifts
     /*
     next: 1 -> 2 , 2 -> 3 , 0 -> 1
     end: 3 -> 4
     back: 3 -> 2
     to_start: 1 -> 0 , 2 -> 0
+    get_state: 0 -> 0, 1 -> 1, 2 -> 2, 3 -> 3
      */
 
     private int state = -1;
@@ -82,7 +84,10 @@ public class MyClass {
     }
 
     int get_state() {
-        return state;
+        if (state != 4) {
+            return state;
+        } else {
+            throw new RuntimeException();
+        }
     }
 }
-
