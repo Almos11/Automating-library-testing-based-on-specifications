@@ -1,36 +1,38 @@
+libsl "1.0.0";
 library MyClass;
 
 types {
     CustomString (String);
 }
 
-automaton MyAutomat {
+automaton MyAutomat : Int{
 
-//    var num_state: int = 0;
+//    var num_state: int = -1;
 
-    state created;
-    state calculate_sum;
-    state calculate_diff;
-    state calculate_division;
+    initstate created;
+    state sum;
+    state diff;
+    state division;
     finishstate closed;
 
-    shift created -> calculate_sum (name);
-    shift calculate_sum -> self (get_sum);
-    shift calculate_sum -> created (to_start);
-    shift calculate_sum -> calculate_diff (next);
-    shift calculate_diff -> self (get_diff);
-    shift calculate_diff -> created (to_start);
-    shift calculate_diff -> calculate_division (next);
-    shift calculate_division -> self (get_division);
-    shift calculate_division -> calculate_diff (back);
-    shift calculate_division -> closed (end);
+    shift created -> self by get_state;
+    shift created -> sum by next();
+    shift sum -> self by [get_sum, get_state];
+    shift sum -> created by to_start;
+    shift sum -> diff by next;
+    shift diff -> self by [get_diff, get_state];
+    shift diff -> created by to_start;
+    shift diff -> division by next;
+    shift division -> self by [get_division, get_state];
+    shift division -> diff by back;
+    shift division -> closed by end;
 }
 
-fun MyAutomat.name(name: string);
 fun MyAutomat.get_sum(a: int, b: int): int;
 fun MyAutomat.get_diff(a: int, b: int): int;
 fun MyAutomat.next();
 fun MyAutomat.to_start();
 fun MyAutomat.back();
 fun MyAutomat.get_division(a: int, b: int): float;
+fun MyAutomat.get_state(): int;
 fun MyAutomat.end();
