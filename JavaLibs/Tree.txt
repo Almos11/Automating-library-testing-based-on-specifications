@@ -1,0 +1,38 @@
+Node(nameState=created, isInitState=true, to=[
+    State(name=self, kind=SIMPLE, isSelf=true, isAny=false, entityPosition=EntityPosition(fileName=lsl, startPosition=PositionInfo(line=18, column=4), endPosition=PositionInfo(line=18, column=38))), 
+    State(name=sum, kind=SIMPLE, isSelf=false, isAny=false, entityPosition=EntityPosition(fileName=lsl, startPosition=PositionInfo(line=13, column=4), endPosition=PositionInfo(line=13, column=13)))], 
+        functions=[
+            FunctionReference(get_state), 
+            FunctionReference(next)])
+
+Node(nameState=sum, isInitState=false, to=[
+    State(name=self, kind=SIMPLE, isSelf=true, isAny=false, entityPosition=EntityPosition(fileName=lsl, startPosition=PositionInfo(line=20, column=4), endPosition=PositionInfo(line=20, column=45))),
+    State(name=created, kind=INIT, isSelf=false, isAny=false, entityPosition=EntityPosition(fileName=lsl, startPosition=PositionInfo(line=12, column=4), endPosition=PositionInfo(line=12, column=21))),
+    State(name=diff, kind=SIMPLE, isSelf=false, isAny=false, entityPosition=EntityPosition(fileName=lsl, startPosition=PositionInfo(line=14, column=4), endPosition=PositionInfo(line=14, column=14)))], 
+        functions=[
+            FunctionReference(get_sum), 
+            FunctionReference(get_state), 
+            FunctionReference(to_start), 
+            FunctionReference(next)])
+
+Node(nameState=diff, isInitState=false, to=[
+    State(name=self, kind=SIMPLE, isSelf=true, isAny=false, entityPosition=EntityPosition(fileName=lsl, startPosition=PositionInfo(line=23, column=4), endPosition=PositionInfo(line=23, column=47))), 
+    State(name=created, kind=INIT, isSelf=false, isAny=false, entityPosition=EntityPosition(fileName=lsl, startPosition=PositionInfo(line=12, column=4), endPosition=PositionInfo(line=12, column=21))), 
+    State(name=division, kind=SIMPLE, isSelf=false, isAny=false, entityPosition=EntityPosition(fileName=lsl, startPosition=PositionInfo(line=15, column=4), endPosition=PositionInfo(line=15, column=18)))], 
+        functions=[
+            FunctionReference(get_diff), 
+            FunctionReference(get_state), 
+            FunctionReference(to_start), 
+            FunctionReference(next)])
+
+Node(nameState=division, isInitState=false, to=[
+    State(name=self, kind=SIMPLE, isSelf=true, isAny=false, entityPosition=EntityPosition(fileName=lsl, startPosition=PositionInfo(line=26, column=4), endPosition=PositionInfo(line=26, column=55))), 
+    State(name=diff, kind=SIMPLE, isSelf=false, isAny=false, entityPosition=EntityPosition(fileName=lsl, startPosition=PositionInfo(line=14, column=4), endPosition=PositionInfo(line=14, column=14))), 
+    State(name=closed, kind=FINISH, isSelf=false, isAny=false, entityPosition=EntityPosition(fileName=lsl, startPosition=PositionInfo(line=16, column=4), endPosition=PositionInfo(line=16, column=22)))], 
+        functions=[
+            FunctionReference(get_division), 
+            FunctionReference(get_state), 
+            FunctionReference(back), 
+            FunctionReference(end)])
+
+Node(nameState=closed, isInitState=false, to=[], functions=[])
