@@ -9,23 +9,23 @@ automaton MyAutomat : Int{
 
 //    var num_state: int = -1;
 
-    state created;
-    state calculate_sum;
-    state calculate_diff;
-    state calculate_division;
+    initstate created;
+    state sum;
+    state diff;
+    state division;
     finishstate closed;
 
-    shift created -> self (get_state);
-    shift created -> calculate_sum (next);
-    shift calculate_sum -> self (get_sum, get_state);
-    shift calculate_sum -> created (to_start);
-    shift calculate_sum -> calculate_diff (next);
-    shift calculate_diff -> self (get_diff, get_state);
-    shift calculate_diff -> created (to_start);
-    shift calculate_diff -> calculate_division (next);
-    shift calculate_division -> self (get_division, get_state);
-    shift calculate_division -> calculate_diff (back);
-    shift calculate_division -> closed (end);
+    shift created -> self by get_state;
+    shift created -> sum by next();
+    shift sum -> self by [get_sum, get_state];
+    shift sum -> created by to_start;
+    shift sum -> diff by next;
+    shift diff -> self by [get_diff, get_state];
+    shift diff -> created by to_start;
+    shift diff -> division by next;
+    shift division -> self by [get_division, get_state];
+    shift division -> diff by back;
+    shift division -> closed by end;
 }
 
 fun MyAutomat.get_sum(a: int, b: int): int;

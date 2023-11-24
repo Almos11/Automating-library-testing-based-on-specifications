@@ -13,7 +13,7 @@ repositories {
 
 dependencies {
     testImplementation(kotlin("test"))
-    implementation("com.github.vpa-research:libsl-parser:718b7a416d175486ec91d30799574e8fc25e4a6f")
+    implementation("com.github.vpa-research:libsl-parser:3b499809a5")
 }
 
 tasks.test {
