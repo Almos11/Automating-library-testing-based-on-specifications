@@ -28,7 +28,7 @@ fun fillUsed(states: MutableList<State>) : HashMap<String, Boolean> {
 data class Node(
     val nameState: String,
     val isInitState: Boolean,
-    val to: MutableList<State> = mutableListOf(),
+    val to: MutableList<Pair<State, MutableList<FunctionReference>>> = mutableListOf(),
     val functions: MutableList<FunctionReference> = mutableListOf()
 )
 
@@ -42,7 +42,7 @@ fun dfs(used: HashMap<String, Boolean>, shifts: MutableList<Shift>, nodes: Mutab
     for (indexes in shifts.indices) {
         val shift = shifts[indexes]
         if (shift.from.name == curState.name) {
-            node.to.add(shift.to)
+            node.to.add(Pair(shift.to, shift.functions))
             for (function in shift.functions) {
                 node.functions.add(function)
             }
@@ -56,9 +56,9 @@ fun dfs(used: HashMap<String, Boolean>, shifts: MutableList<Shift>, nodes: Mutab
 
 }
 
-fun main(args: Array<String>) {
-    val libSL = LibSL("./src/test/testdata/lsl/")
-    val library = libSL.loadFromFile(File("./src/test/testdata/lsl/test.lsl"))
+fun getGraph(path: String) {
+    val libSL = LibSL("")
+    val library = libSL.loadFromFile(File(path))
     val automata = library.automata[0]
     // automata_size == 1
     val states = automata.states
@@ -76,4 +76,9 @@ fun main(args: Array<String>) {
     for (node in nodes) {
         println(node);
     }
+}
+
+fun main(args: Array<String>) {
+    val path  = "./src/test/testdata/lsl/test.lsl";
+    getGraph(path);
 }
