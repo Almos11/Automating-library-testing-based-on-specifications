@@ -33,6 +33,14 @@ class MyClass(private val name: String) {
         }
     }
 
+    fun back() {
+        if (state == 3) {
+            state -= 1
+        } else {
+            throw RuntimeException()
+        }
+    }
+
     fun toStart() {
         if (state == 1 || state == 2) {
             state = 0
@@ -52,5 +60,10 @@ class MyClass(private val name: String) {
 
     fun getState(): Int {
         return state
+    }
+
+
+    fun changeState(state: Int) {
+        this.state = state
     }
 }

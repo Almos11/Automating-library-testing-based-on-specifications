@@ -12,8 +12,11 @@ repositories {
 }
 
 dependencies {
+    implementation("junit:junit:4.13.1")
+    implementation("org.junit.jupiter:junit-jupiter:5.8.1")
     testImplementation(kotlin("test"))
     implementation("com.github.vpa-research:libsl-parser:3b499809a5")
+    implementation("org.jetbrains.kotlin:kotlin-reflect:1.5.30")
 }
 
 tasks.test {

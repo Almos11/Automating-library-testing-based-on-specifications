@@ -56,11 +56,10 @@ fun dfs(used: HashMap<String, Boolean>, shifts: MutableList<Shift>, nodes: Mutab
 
 }
 
-fun getGraph(path: String) {
+fun getGraph(path: String) : MutableList<Node> {
     val libSL = LibSL("")
     val library = libSL.loadFromFile(File(path))
     val automata = library.automata[0]
-    // automata_size == 1
     val states = automata.states
     val shifts = automata.shifts
 
@@ -73,12 +72,28 @@ fun getGraph(path: String) {
     val queueNodes: Queue<State> = LinkedList();
     queueNodes.offer(states[initStateIndex]);
     dfs(used, shifts, nodes, queueNodes);
+    return nodes
+}
+
+fun printNodes(nodes: MutableList<Node>) {
     for (node in nodes) {
         println(node);
     }
 }
 
-fun main(args: Array<String>) {
+fun testPrint() {
     val path  = "./src/test/testdata/lsl/test.lsl";
-    getGraph(path);
+    val libSL = LibSL("")
+    val library = libSL.loadFromFile(File(path))
+    val automata = library.automata[0]
+    println(automata.localFunctions)
+}
+
+
+
+fun main(args: Array<String>) {
+    // val path  = "./src/test/testdata/lsl/test.lsl";
+    // val nodes = getGraph(path);
+    // printNodes(nodes)
+    testPrint()
 }

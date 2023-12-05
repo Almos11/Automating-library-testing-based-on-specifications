@@ -60,4 +60,14 @@ class MyClassTest {
         myClass.end()
         assertEquals(4, myClass.getState())
     }
+
+    @Test
+    fun testBack() {
+        val myClass = MyClass("Test")
+        myClass.next()
+        myClass.next()
+        myClass.next()
+        myClass.back()
+        assertEquals(2, myClass.getState())
+    }
 }
