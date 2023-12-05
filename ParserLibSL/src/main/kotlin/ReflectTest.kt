@@ -1,3 +1,4 @@
+import org.jetbrains.research.libsl.nodes.Function
 import org.junit.jupiter.api.Test
 import kotlin.reflect.full.*
 import org.jetbrains.research.libsl.nodes.references.FunctionReference
@@ -6,14 +7,11 @@ import org.junit.jupiter.api.assertDoesNotThrow
 
 class ReflectTest {
 
-    private fun testFunction(myClass: MyClass, functionReference: FunctionReference) {
+    private fun testFunction(myClass: MyClass, functionReference: Function) {
         val nameFunction = functionReference.name
         val myClassKClass = myClass::class
         val myFunction = myClassKClass.functions.find { it.name == nameFunction }
-        var countArgs = 0
-        if (myFunction != null) {
-            countArgs = myFunction.parameters.size - 1
-        }
+        val countArgs = functionReference.args.size
         assert(myFunction != null)
         val listOfArgs: MutableList<Any> = mutableListOf()
         for (i in 1..countArgs) {
@@ -37,11 +35,6 @@ class ReflectTest {
     fun generalTest() {
         val path  = "./src/test/testdata/lsl/test.lsl";
         val nodes = getGraph(path);
-        val myClass = MyClass("Test")
-        val node = nodes[0]
-        val state = 1
-        myClass.changeState(1)
-        testNode(nodes[1], state)
         for (i in 0..<nodes.size) {
             testNode(nodes[i], i)
         }

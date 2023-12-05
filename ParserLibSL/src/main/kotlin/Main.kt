@@ -1,7 +1,6 @@
 import org.jetbrains.research.libsl.LibSL
-import org.jetbrains.research.libsl.nodes.Shift
-import org.jetbrains.research.libsl.nodes.State
-import org.jetbrains.research.libsl.nodes.StateKind
+import org.jetbrains.research.libsl.nodes.*
+import org.jetbrains.research.libsl.nodes.Function
 import org.jetbrains.research.libsl.nodes.references.FunctionReference
 import java.io.File
 import java.lang.RuntimeException
@@ -29,10 +28,10 @@ data class Node(
     val nameState: String,
     val isInitState: Boolean,
     val to: MutableList<Pair<State, MutableList<FunctionReference>>> = mutableListOf(),
-    val functions: MutableList<FunctionReference> = mutableListOf()
+    val functions: MutableList<Function> = mutableListOf()
 )
 
-fun dfs(used: HashMap<String, Boolean>, shifts: MutableList<Shift>, nodes: MutableList<Node>, queueNodes: Queue<State>) {
+fun dfs(used: HashMap<String, Boolean>, shifts: MutableList<Shift>, nodes: MutableList<Node>, queueNodes: Queue<State>, functionMap: HashMap<String, Function>) {
     if (queueNodes.isEmpty()) {
         return;
     }
@@ -44,7 +43,7 @@ fun dfs(used: HashMap<String, Boolean>, shifts: MutableList<Shift>, nodes: Mutab
         if (shift.from.name == curState.name) {
             node.to.add(Pair(shift.to, shift.functions))
             for (function in shift.functions) {
-                node.functions.add(function)
+                functionMap[function.name]?.let { node.functions.add(it) }
             }
             if (used[shift.to.name] == false) {
                 queueNodes.offer(shift.to)
@@ -52,8 +51,16 @@ fun dfs(used: HashMap<String, Boolean>, shifts: MutableList<Shift>, nodes: Mutab
         }
     }
     nodes.add(node);
-    dfs(used, shifts, nodes, queueNodes);
+    dfs(used, shifts, nodes, queueNodes, functionMap);
 
+}
+
+fun getFunctionMap(automata : Automaton) : HashMap<String, Function> {
+    val myMap = HashMap<String, Function>()
+    for (function in automata.functions) {
+        myMap[function.name] = function
+    }
+    return myMap
 }
 
 fun getGraph(path: String) : MutableList<Node> {
@@ -62,7 +69,7 @@ fun getGraph(path: String) : MutableList<Node> {
     val automata = library.automata[0]
     val states = automata.states
     val shifts = automata.shifts
-
+    val functionMap = getFunctionMap(automata)
     val used = fillUsed(states);
     val initStateIndex = getInitState(states);
     if (initStateIndex == -1) {
@@ -71,7 +78,7 @@ fun getGraph(path: String) : MutableList<Node> {
     val nodes: MutableList<Node> = mutableListOf();
     val queueNodes: Queue<State> = LinkedList();
     queueNodes.offer(states[initStateIndex]);
-    dfs(used, shifts, nodes, queueNodes);
+    dfs(used, shifts, nodes, queueNodes, functionMap);
     return nodes
 }
 
@@ -86,14 +93,24 @@ fun testPrint() {
     val libSL = LibSL("")
     val library = libSL.loadFromFile(File(path))
     val automata = library.automata[0]
-    println(automata.localFunctions)
+    val shifts = automata.shifts
+    for (shift in shifts) {
+        println(shift.functions)
+    }
+    val myMap = HashMap<String, Function>()
+    for (function in automata.functions) {
+        myMap[function.name] = function
+    }
+
 }
 
 
 
+
+
 fun main(args: Array<String>) {
-    // val path  = "./src/test/testdata/lsl/test.lsl";
-    // val nodes = getGraph(path);
-    // printNodes(nodes)
-    testPrint()
+    val path  = "./src/test/testdata/lsl/test.lsl";
+    val nodes = getGraph(path);
+    printNodes(nodes)
+    // testPrint()
 }

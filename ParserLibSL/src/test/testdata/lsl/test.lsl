@@ -19,7 +19,7 @@ automaton MyAutomat : Int{
     finishstate closed;
 
     shift created -> self by getState;
-    shift created -> sum by next();
+    shift created -> sum by next;
     shift sum -> self by [getSum, getState];
     shift sum -> created by toStart;
     shift sum -> diff by next;
@@ -29,9 +29,11 @@ automaton MyAutomat : Int{
     shift division -> self by [getDivision, getState];
     shift division -> diff by back;
     shift division -> closed by end;
+
+    fun getSum(a: Int, b: Int): Int {
+    }
 }
 
-fun MyAutomat.getSum(a: Int, b: Int): Int;
 fun MyAutomat.getDiff(a: Int, b: Int): Int;
 fun MyAutomat.next();
 fun MyAutomat.toStart();
