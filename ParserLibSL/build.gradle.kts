@@ -17,6 +17,7 @@ dependencies {
     testImplementation(kotlin("test"))
     implementation("com.github.vpa-research:libsl-parser:3b499809a5")
     implementation("org.jetbrains.kotlin:kotlin-reflect:1.5.30")
+    implementation("org.jeasy:easy-random-core:4.1.0")
 }
 
 tasks.test {
