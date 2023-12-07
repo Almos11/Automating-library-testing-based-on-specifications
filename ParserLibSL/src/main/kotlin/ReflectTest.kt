@@ -2,6 +2,7 @@ import org.jeasy.random.EasyRandom
 import org.jetbrains.research.libsl.nodes.Function
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertDoesNotThrow
+import org.junit.jupiter.api.assertThrows
 import kotlin.random.Random
 import kotlin.reflect.full.functions
 
@@ -41,6 +42,21 @@ class ReflectTest {
             } else {
                 myFunction?.call(myClass, *listOfArgs.toTypedArray())
             }
+        }
+
+    }
+
+    private fun testUnavailableFunction(myClass: MyClass, function: Function) {
+        val nameFunction = function.name
+        val myClassKClass = myClass::class
+        val myFunction = myClassKClass.functions.find { it.name == nameFunction }
+        assert(myFunction != null)
+        val listOfArgs: MutableList<Any> = mutableListOf()
+        for (arg in function.args) {
+            listOfArgs.add(getRandomValue(arg.typeReference.name))
+        }
+        assertThrows<RuntimeException> {
+            myFunction?.call(myClass, *listOfArgs.toTypedArray())
         }
 
     }
