@@ -18,15 +18,14 @@ automaton MyAutomat : Int{
     state division;
     finishstate closed;
 
-    shift created -> self by getState;
     shift created -> sum by next;
-    shift sum -> self by [getSum, getState];
+    shift sum -> self by getSum;
     shift sum -> created by toStart;
     shift sum -> diff by next;
-    shift diff -> self by [getDiff, getState];
+    shift diff -> self by getDiff;
     shift diff -> created by toStart;
     shift diff -> division by next;
-    shift division -> self by [getDivision, getState];
+    shift division -> self by getDivision;
     shift division -> diff by back;
     shift division -> closed by end;
 
@@ -39,5 +38,4 @@ fun MyAutomat.next();
 fun MyAutomat.toStart();
 fun MyAutomat.back();
 fun MyAutomat.getDivision(a: Int, b: Int): Float;
-fun MyAutomat.getState(): Int;
 fun MyAutomat.end();

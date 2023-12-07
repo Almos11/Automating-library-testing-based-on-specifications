@@ -1,6 +1,4 @@
-class MyClass(private val name: String) {
-    private var state: Int = 0
-
+data class MyClass(private var name: String, private var state: Int = 0) {
     fun next() {
         if (state != 4) {
             state += 1
@@ -57,13 +55,7 @@ class MyClass(private val name: String) {
             throw RuntimeException()
         }
     }
-
     fun getState(): Int {
         return state
-    }
-
-
-    fun changeState(state: Int) {
-        this.state = state
     }
 }

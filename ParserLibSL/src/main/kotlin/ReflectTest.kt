@@ -61,21 +61,30 @@ class ReflectTest {
 
     }
 
-    private fun testNode(node: Node, state: Int) {
-        for (functionRef in node.functions) {
-            val myClass = MyClass("Test")
-            myClass.changeState(state)
-            testFunction(myClass, functionRef)
+    private fun myTest(myClass: MyClass, index: Int, nodes: MutableList<Node>, used: Array<Boolean>) {
+        if (used[index]) {
+            return
         }
+        used[index] = true
+        val node = nodes[index]
+        for (function in node.functions) {
+            val indexTo = node.functionsAndIndex[function.name]
+            val newMyClass = myClass.copy()
+            testFunction(newMyClass, function)
+            if (indexTo != null) {
+                myTest(newMyClass, indexTo, nodes, used)
+            }
+        }
+
     }
 
     @Test
     fun generalTest() {
         val path  = "./src/test/testdata/lsl/test.lsl";
-        val nodes = getGraph(path);
-        for (i in 0..<nodes.size) {
-            testNode(nodes[i], i)
-        }
+        val nodes = getGraph(path)
+        val used = Array(nodes.size) {false}
+        val myClass = MyClass("test")
+        myTest(myClass, 0, nodes, used)
     }
 
 }

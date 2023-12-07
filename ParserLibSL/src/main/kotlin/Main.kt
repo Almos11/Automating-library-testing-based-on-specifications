@@ -28,10 +28,13 @@ data class Node(
     val nameState: String,
     val isInitState: Boolean,
     val to: MutableList<Pair<State, MutableList<FunctionReference>>> = mutableListOf(),
-    val functions: MutableList<Function> = mutableListOf()
+    val functions: MutableList<Function> = mutableListOf(),
+    val functionsAndStates: HashMap<String, String> = hashMapOf(),
+    val functionsAndIndex: HashMap<String, Int> = hashMapOf()
 )
 
-fun dfs(used: HashMap<String, Boolean>, shifts: MutableList<Shift>, nodes: MutableList<Node>, queueNodes: Queue<State>, functionMap: HashMap<String, Function>) {
+fun dfs(used: HashMap<String, Boolean>, shifts: MutableList<Shift>, nodes: MutableList<Node>, queueNodes: Queue<State>,
+        functionMap: HashMap<String, Function>, statesAndNodes: HashMap<String, Int>) {
     if (queueNodes.isEmpty()) {
         return;
     }
@@ -44,14 +47,20 @@ fun dfs(used: HashMap<String, Boolean>, shifts: MutableList<Shift>, nodes: Mutab
             node.to.add(Pair(shift.to, shift.functions))
             for (function in shift.functions) {
                 functionMap[function.name]?.let { node.functions.add(it) }
+                if (shift.to.name == "self") {
+                    node.functionsAndStates[function.name] = node.nameState
+                } else {
+                    node.functionsAndStates[function.name] = shift.to.name
+                }
             }
             if (used[shift.to.name] == false) {
                 queueNodes.offer(shift.to)
             }
         }
     }
+    statesAndNodes[curState.name] = nodes.size
     nodes.add(node);
-    dfs(used, shifts, nodes, queueNodes, functionMap);
+    dfs(used, shifts, nodes, queueNodes, functionMap, statesAndNodes);
 
 }
 
@@ -75,16 +84,26 @@ fun getGraph(path: String) : MutableList<Node> {
     if (initStateIndex == -1) {
         throw RuntimeException("do not find init state");
     }
-    val nodes: MutableList<Node> = mutableListOf();
-    val queueNodes: Queue<State> = LinkedList();
-    queueNodes.offer(states[initStateIndex]);
-    dfs(used, shifts, nodes, queueNodes, functionMap);
+    val nodes: MutableList<Node> = mutableListOf()
+    val queueNodes: Queue<State> = LinkedList()
+    queueNodes.offer(states[initStateIndex])
+    val statesAndNodes = HashMap<String, Int>()
+    dfs(used, shifts, nodes, queueNodes, functionMap, statesAndNodes)
+    for (node in nodes) {
+        for (function in node.functions) {
+            val state = node.functionsAndStates[function.name]
+            val index = statesAndNodes[state]
+            if (index != null) {
+                node.functionsAndIndex[function.name] = index
+            }
+        }
+    }
     return nodes
 }
 
 fun printNodes(nodes: MutableList<Node>) {
     for (node in nodes) {
-        println(node);
+        println(node.functionsAndIndex);
     }
 }
 
