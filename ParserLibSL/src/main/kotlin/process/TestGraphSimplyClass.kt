@@ -1,12 +1,14 @@
+import data.SimplyMyClass
+import graph.Node
+import graph.getGraph
 import org.jeasy.random.EasyRandom
 import org.jetbrains.research.libsl.nodes.Function
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertDoesNotThrow
 import org.junit.jupiter.api.assertThrows
-import kotlin.random.Random
 import kotlin.reflect.full.functions
 
-class ReflectTest {
+class TestGraphSimplyClass {
     private fun getRandomValue(type : String) : Any {
         val easyRandom = EasyRandom()
         return when (type) {
@@ -26,7 +28,7 @@ class ReflectTest {
         return targetType == typeInLine
     }
 
-    private fun testFunction(myClass: MyClass, function: Function) {
+    private fun testFunction(myClass: SimplyMyClass, function: Function) {
         val nameFunction = function.name
         val myClassKClass = myClass::class
         val myFunction = myClassKClass.functions.find { it.name == nameFunction }
@@ -46,7 +48,7 @@ class ReflectTest {
 
     }
 
-    private fun testUnavailableFunction(myClass: MyClass, function: Function) {
+    private fun testUnavailableFunction(myClass: SimplyMyClass, function: Function) {
         val nameFunction = function.name
         val myClassKClass = myClass::class
         val myFunction = myClassKClass.functions.find { it.name == nameFunction }
@@ -61,7 +63,7 @@ class ReflectTest {
 
     }
 
-    private fun myTest(myClass: MyClass, index: Int, nodes: MutableList<Node>, used: Array<Boolean>) {
+    private fun myTest(myClass: SimplyMyClass, index: Int, nodes: MutableList<Node>, used: Array<Boolean>) {
         if (used[index]) {
             return
         }
@@ -80,11 +82,15 @@ class ReflectTest {
 
     @Test
     fun generalTest() {
-        val path  = "./src/test/testdata/lsl/test.lsl";
+        val path  = "./src/test/testdata/lsl/SimplyMyClass.lsl";
         val nodes = getGraph(path)
         val used = Array(nodes.size) {false}
-        val myClass = MyClass("test")
+        val myClass = SimplyMyClass("test")
         myTest(myClass, 0, nodes, used)
+    }
+
+    fun testWithKTests(pathToLslFile: String, countTests: Int) {
+        
     }
 
 }

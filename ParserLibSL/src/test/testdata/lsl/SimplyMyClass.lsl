@@ -1,5 +1,5 @@
 libsl "1.0.0";
-library MyClass;
+library SimplyMyClass;
 
 types {
     CustomString (String);

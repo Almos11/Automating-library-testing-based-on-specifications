@@ -1,4 +1,6 @@
-data class MyClass(private var name: String, private var state: Int = 0) {
+package data
+
+data class SimplyMyClass(private var name: String, private var state: Int = 0) {
     fun next() {
         if (state != 4) {
             state += 1

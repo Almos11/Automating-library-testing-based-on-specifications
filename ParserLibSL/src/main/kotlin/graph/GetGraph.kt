@@ -1,3 +1,5 @@
+package graph
+
 import org.jetbrains.research.libsl.LibSL
 import org.jetbrains.research.libsl.nodes.*
 import org.jetbrains.research.libsl.nodes.Function
@@ -108,7 +110,7 @@ fun printNodes(nodes: MutableList<Node>) {
 }
 
 fun testPrint() {
-    val path  = "./src/test/testdata/lsl/test.lsl";
+    val path  = "./src/test/testdata/lsl/SimplyMyClass.lsl";
     val libSL = LibSL("")
     val library = libSL.loadFromFile(File(path))
     val automata = library.automata[0]

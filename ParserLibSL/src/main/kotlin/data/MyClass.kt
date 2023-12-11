@@ -1,0 +1,190 @@
+package data
+
+import java.io.BufferedWriter
+import java.io.File
+import java.io.FileWriter
+
+data class InfoText(val countWords: Int, val countLetters: Int, val mostFrequentWord: String, val mostFrequentChar: Char) {}
+
+data class MyClass(private var state: String, private var text: String) {
+    fun toStart() {
+        if (state == "Created" || state == "Printed") {
+            state = "Created"
+        } else {
+            throw RuntimeException("Вы не можете вызывать эту функцию не из состояния 'Created', 'Printed'")
+        }
+    }
+
+    fun sendText(text: String) {
+        if (state == "Started") {
+            this.text = text
+            state = "ReadyToProcessText"
+        } else {
+            throw RuntimeException("Вы не можете вызывать эту функцию не из состояния 'Started'")
+        }
+    }
+
+    fun toEnd() {
+        if (state == "Printed") {
+            state = "Closed"
+        } else {
+            throw RuntimeException("Вы не можете вызывать эту функцию не из состояния 'Printed'")
+        }
+    }
+
+    fun toCharacters() {
+        if (state == "ReadyToProcessText") {
+            state = "CharacterProcessing"
+        } else {
+            throw RuntimeException("Вы не можете вызывать эту функцию не из состояния 'ReadyToProcessText'")
+        }
+    }
+
+    fun toWords() {
+        if (state == "ReadyToProcessText") {
+            state = "WordsProcessing"
+        } else {
+            throw RuntimeException("Вы не можете вызывать эту функцию не из состояния 'ReadyToProcessText'")
+        }
+    }
+
+    fun toText() {
+        if (state == "ReadyToProcessText") {
+            state = "TextProcessing"
+        } else {
+            throw RuntimeException("Вы не можете вызывать эту функцию не из состояния 'ReadyToProcessText'")
+        }
+    }
+
+    fun stopProcess() {
+        if (state == "CharacterProcessing" || state == "WordsProcessing" || state == "TextProcessing") {
+            state = "EndProcessing"
+        } else {
+            throw RuntimeException("Вы не можете вызывать эту функцию не из состояния 'CharactersProcessing', 'WordsProcessing', 'TextProcessing'")
+        }
+    }
+
+    fun printToConsole() {
+        if (state == "ReadyToProcessText" || state == "EndProcessing") {
+            println(text)
+            state = "Printed"
+        } else {
+            throw RuntimeException("Вы не можете вызывать эту функцию не из состояния 'ReadyToProcessText', 'EndProcessing'")
+        }
+    }
+
+    fun printToFile(filePath: String) {
+        if (state == "ReadyToProcessText" || state == "EndProcessing") {
+            try {
+                val file = File(filePath)
+                val fileWriter = FileWriter(file)
+                val bufferedWriter = BufferedWriter(fileWriter)
+                bufferedWriter.write(text)
+                bufferedWriter.close()
+                fileWriter.close()
+                println("Строка успешно записана в файл: $filePath")
+                state = "Printed"
+            } catch (e: Exception) {
+                println("Ошибка при записи в файл: ${e.message}, попробойти другой файл")
+            }
+        } else {
+            throw RuntimeException("Вы не можете вызывать эту функцию не из состояния 'ReadyToProcessText', 'EndProcessing'")
+        }
+    }
+
+    fun deleteCharacters(ch: Char) {
+        if (state == "CharacterProcessing") {
+            text = text.replace(ch.toString(), "")
+        } else {
+            throw RuntimeException("Вы не можете вызывать эту функцию не из состояния 'CharacterProcessing'")
+        }
+    }
+
+    fun replaceCharacters(chOld: Char, chNew: Char) {
+        if (state == "CharacterProcessing") {
+            text = text.replace(chOld.toString(), chNew.toString())
+        } else {
+            throw RuntimeException("Вы не можете вызывать эту функцию не из состояния 'CharacterProcessing'")
+        }
+    }
+
+    fun deleteWords(word: String) {
+        if (state == "CharacterProcessing") {
+            text = text.replace(word, "")
+        } else {
+            throw RuntimeException("Вы не можете вызывать эту функцию не из состояния 'WordProcessing'")
+        }
+    }
+
+    fun replaceWords(wordOld: String, wordNew: String) {
+        if (state == "CharacterProcessing") {
+            text = text.replace(wordOld, wordNew)
+        } else {
+            throw RuntimeException("Вы не можете вызывать эту функцию не из состояния 'WordProcessing'")
+        }
+    }
+
+    fun reverseText() {
+        if (state == "TextProcessing") {
+            text = text.reversed()
+        } else {
+            throw RuntimeException("Вы не можете вызывать эту функцию не из состояния 'TextProcessing'")
+        }
+    }
+
+    fun countLetters(): Int {
+        if (state == "TextProcessing") {
+            return text.count { it.isLetter() }
+        } else {
+            throw RuntimeException("Вы не можете вызывать эту функцию не из состояния 'TextProcessing'")
+        }
+    }
+
+    fun countWords(): Int {
+        if (state == "TextProcessing") {
+            val words = text.split("\\s+".toRegex())
+            val nonEmptyWords = words.filter { it.isNotEmpty() }
+            return nonEmptyWords.size
+        } else {
+            throw RuntimeException("Вы не можете вызывать эту функцию не из состояния 'TextProcessing'")
+        }
+    }
+
+    fun findMostFrequentWord(): Pair<String?, Int?> {
+        if (state == "TextProcessing") {
+            val words = text.split("\\s+".toRegex())
+            val wordCountMap = mutableMapOf<String, Int>()
+            for (word in words) {
+                val normalizedWord = word.toLowerCase()
+                val count = wordCountMap.getOrDefault(normalizedWord, 0)
+                wordCountMap[normalizedWord] = count + 1
+            }
+            val mostFrequentWord = wordCountMap.maxByOrNull { it.value }
+            return Pair(mostFrequentWord?.key, mostFrequentWord?.value)
+        } else {
+            throw RuntimeException("Вы не можете вызывать эту функцию не из состояния 'TextProcessing'")
+        }
+    }
+
+    private fun findMostFrequentChar(): Pair<Char?, Int?> {
+        val charCountMap = text.groupingBy { it }.eachCount()
+        val mostFrequentEntry = charCountMap.maxByOrNull { it.value }
+        return Pair(mostFrequentEntry?.key, mostFrequentEntry?.value)
+    }
+
+    fun getInfoText(): Unit? {
+        if (state == "TextProcessing") {
+            val mostFrequentWord = findMostFrequentWord().first
+            val mostFrequentChar = findMostFrequentChar().first
+            val countLetters = countLetters()
+            val countWords = countWords()
+            return mostFrequentWord?.let {
+                if (mostFrequentChar != null) {
+                    InfoText(countWords, countLetters, it, mostFrequentChar)
+                }
+            }
+        } else {
+            throw RuntimeException("Вы не можете вызывать эту функцию не из состояния 'TextProcessing'")
+        }
+    }
+}
