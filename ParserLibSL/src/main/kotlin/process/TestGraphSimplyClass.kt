@@ -1,6 +1,7 @@
+import cycle.Cycle
 import data.SimplyMyClass
-import graph.Node
-import graph.getGraph
+import graph.Graph
+import node.Node
 import org.jeasy.random.EasyRandom
 import org.jetbrains.research.libsl.nodes.Function
 import org.junit.jupiter.api.Test
@@ -80,10 +81,22 @@ class TestGraphSimplyClass {
 
     }
 
+    private fun testCycle(countVertexes: Int, edges: MutableList<Pair<Int, Int>>) {
+        val graph = Cycle(countVertexes)
+        for (edge in edges) {
+            graph.addEdge(edge.first, edge.second)
+        }
+        println(graph.findBestCycle())
+    }
+
     @Test
     fun generalTest() {
         val path  = "./src/test/testdata/lsl/SimplyMyClass.lsl";
-        val nodes = getGraph(path)
+        val graph = Graph(path)
+        graph.process()
+        val nodes = graph.nodes
+        val edges = graph.edges
+        testCycle(nodes.size, edges)
         //val used = Array(nodes.size) {false}
         //val myClass = SimplyMyClass("test")
         //myTest(myClass, 0, nodes, used)

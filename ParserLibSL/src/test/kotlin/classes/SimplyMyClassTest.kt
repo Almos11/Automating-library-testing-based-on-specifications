@@ -1,3 +1,5 @@
+package classes
+
 import data.SimplyMyClass
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.Assertions.*

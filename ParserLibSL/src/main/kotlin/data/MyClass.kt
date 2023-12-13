@@ -132,7 +132,7 @@ data class MyClass(private var state: String, private var text: String) {
         }
     }
 
-    fun countLetters(): Int {
+    private fun countLetters(): Int {
         if (state == "TextProcessing") {
             return text.count { it.isLetter() }
         } else {
@@ -140,7 +140,7 @@ data class MyClass(private var state: String, private var text: String) {
         }
     }
 
-    fun countWords(): Int {
+    private fun countWords(): Int {
         if (state == "TextProcessing") {
             val words = text.split("\\s+".toRegex())
             val nonEmptyWords = words.filter { it.isNotEmpty() }
@@ -150,7 +150,7 @@ data class MyClass(private var state: String, private var text: String) {
         }
     }
 
-    fun findMostFrequentWord(): Pair<String?, Int?> {
+    private fun findMostFrequentWord(): Pair<String?, Int?> {
         if (state == "TextProcessing") {
             val words = text.split("\\s+".toRegex())
             val wordCountMap = mutableMapOf<String, Int>()

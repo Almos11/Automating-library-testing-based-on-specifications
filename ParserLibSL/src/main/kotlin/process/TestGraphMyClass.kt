@@ -1,7 +1,6 @@
 package process
 
 import data.SimplyMyClass
-import graph.getGraph
 import org.jetbrains.research.libsl.LibSL
 import org.junit.jupiter.api.Test
 import java.io.File
