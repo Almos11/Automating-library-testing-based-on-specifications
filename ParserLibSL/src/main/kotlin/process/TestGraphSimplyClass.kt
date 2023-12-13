@@ -1,3 +1,5 @@
+package process
+
 import cycle.Cycle
 import data.SimplyMyClass
 import graph.Graph
@@ -7,6 +9,7 @@ import org.jetbrains.research.libsl.nodes.Function
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertDoesNotThrow
 import org.junit.jupiter.api.assertThrows
+import kotlin.reflect.KProperty
 import kotlin.reflect.full.functions
 
 class TestGraphSimplyClass {
@@ -64,7 +67,7 @@ class TestGraphSimplyClass {
 
     }
 
-    private fun myTest(myClass: SimplyMyClass, index: Int, nodes: MutableList<Node>, used: Array<Boolean>) {
+    private fun myEasyTest(myClass: SimplyMyClass, index: Int, nodes: MutableList<Node>, used: Array<Boolean>) {
         if (used[index]) {
             return
         }
@@ -75,31 +78,96 @@ class TestGraphSimplyClass {
             val newMyClass = myClass.copy()
             testFunction(newMyClass, function)
             if (indexTo != null) {
-                myTest(newMyClass, indexTo, nodes, used)
+                myEasyTest(newMyClass, indexTo, nodes, used)
             }
         }
 
     }
 
-    private fun testCycle(countVertexes: Int, edges: MutableList<Pair<Int, Int>>) {
+    private fun printArray(array: Array<Int>) {
+        for (el in array) {
+            print(el)
+            println(" ")
+        }
+        println()
+    }
+
+    private fun myHardTest(myClass: SimplyMyClass, index: Int, nodes: MutableList<Node>, used: Array<Int>) {
+        printArray(used)
+        if (used[index] == 0) {
+            return
+        }
+        used[index] -= 1
+        val node = nodes[index]
+        for (function in node.functions) {
+            val indexTo = node.functionsAndIndex[function.name]
+            val newMyClass = myClass.copy()
+            testFunction(newMyClass, function)
+            if (indexTo != null) {
+                myHardTest(newMyClass, indexTo, nodes, used)
+            }
+        }
+
+    }
+
+    private fun getLargestCycle(countVertexes: Int, edges: MutableList<Pair<Int, Int>>): List<Int> {
         val graph = Cycle(countVertexes)
         for (edge in edges) {
             graph.addEdge(edge.first, edge.second)
         }
-        println(graph.findBestCycle())
+       return graph.findBestCycle()
+    }
+
+    private fun getGraph(): Graph {
+        val path = "./src/test/testdata/lsl/SimplyMyClass.lsl"
+        val graph = Graph(path)
+        graph.process()
+        return graph
+    }
+
+    private fun isSimplyCycle(path: List<Int>): Boolean {
+        val distinctCombinedList = path.distinct()
+
+        return path.size == distinctCombinedList.size + 1
     }
 
     @Test
-    fun generalTest() {
-        val path  = "./src/test/testdata/lsl/SimplyMyClass.lsl";
-        val graph = Graph(path)
-        graph.process()
+    fun easyTestProcess() {
+        val graph = getGraph()
+        val nodes = graph.nodes
+        val used = Array(nodes.size) {false}
+        val myClass = SimplyMyClass("test")
+        val root = 0
+        myEasyTest(myClass, root, nodes, used)
+    }
+
+    @Test
+    fun hardTestProcess() {
+        val numberOfTests = 100
+        val graph = getGraph()
         val nodes = graph.nodes
         val edges = graph.edges
-        testCycle(nodes.size, edges)
-        //val used = Array(nodes.size) {false}
-        //val myClass = SimplyMyClass("test")
-        //myTest(myClass, 0, nodes, used)
+        val cycle = getLargestCycle(nodes.size, edges)
+        val used = Array(nodes.size) {1}
+        val myClass = SimplyMyClass("test")
+        val cycleSize = cycle.size
+        if (isSimplyCycle(cycle)) {
+            val numberOfTestOnOneVertex = (numberOfTests / cycleSize) + 1
+            for (vertex in cycle) {
+                used[vertex] = numberOfTestOnOneVertex
+            }
+        } else {
+            val frequent = Array(nodes.size) {0}
+            for (vertex in cycle) {
+                frequent[vertex] += 1
+            }
+            val numberOfTestOnOneVertex = (numberOfTests / cycleSize) + 1
+            for (vertex in cycle) {
+                used[vertex] = frequent[vertex] * numberOfTestOnOneVertex
+            }
+        }
+        val root = 0
+        myHardTest(myClass, root, nodes, used)
     }
 
 }

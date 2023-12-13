@@ -109,12 +109,6 @@ class Cycle(val vertices: Int) {
         return longestPath
     }
 
-    fun isSimplyCycle(path: MutableList<Int>): Boolean {
-        val distinctCombinedList = path.distinct()
-
-        return path.size == distinctCombinedList.size + 1
-    }
-
     private fun findMaxCycle(start: Int): List<Int> {
         bfsOnReverseEdges(start)
         bfsOnStraightEdges(start)
