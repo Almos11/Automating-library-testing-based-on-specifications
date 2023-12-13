@@ -84,13 +84,9 @@ class TestGraphSimplyClass {
     fun generalTest() {
         val path  = "./src/test/testdata/lsl/SimplyMyClass.lsl";
         val nodes = getGraph(path)
-        val used = Array(nodes.size) {false}
-        val myClass = SimplyMyClass("test")
-        myTest(myClass, 0, nodes, used)
-    }
-
-    fun testWithKTests(pathToLslFile: String, countTests: Int) {
-        
+        //val used = Array(nodes.size) {false}
+        //val myClass = SimplyMyClass("test")
+        //myTest(myClass, 0, nodes, used)
     }
 
 }

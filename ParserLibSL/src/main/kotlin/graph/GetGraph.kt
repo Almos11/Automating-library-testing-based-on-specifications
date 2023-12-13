@@ -74,7 +74,7 @@ fun getFunctionMap(automata : Automaton) : HashMap<String, Function> {
     return myMap
 }
 
-fun getGraph(path: String) : MutableList<Node> {
+fun getNodes(path: String) : MutableList<Node> {
     val libSL = LibSL("")
     val library = libSL.loadFromFile(File(path))
     val automata = library.automata[0]
@@ -103,9 +103,29 @@ fun getGraph(path: String) : MutableList<Node> {
     return nodes
 }
 
+fun getGraph(path: String): Pair<MutableList<Node>, MutableList<Pair<Int, Int>>> {
+    val nodes = getNodes(path)
+    val edges: MutableList<Pair<Int, Int>> = mutableListOf()
+    for ((index, node) in nodes.withIndex()) {
+        for (function in node.functions) {
+            val indexTo = node.functionsAndIndex[function.name]
+            if (indexTo != null) {
+                edges.add(Pair(index, indexTo))
+            }
+        }
+    }
+    return Pair(nodes, edges)
+}
+
 fun printNodes(nodes: MutableList<Node>) {
     for (node in nodes) {
-        println(node.functionsAndIndex);
+        println(node);
+    }
+}
+
+fun printEdges(edges: MutableList<Pair<Int, Int>>) {
+    for (edge in edges) {
+        println(edge)
     }
 }
 
@@ -130,8 +150,11 @@ fun testPrint() {
 
 
 fun main(args: Array<String>) {
-    val path  = "./src/test/testdata/lsl/test.lsl";
-    val nodes = getGraph(path);
+    val path  = "./src/test/testdata/lsl/SimplyMyClass.lsl";
+    val graph = getGraph(path)
+    val nodes = graph.first
+    val edges = graph.second
     printNodes(nodes)
+    printEdges(edges)
     // testPrint()
 }
