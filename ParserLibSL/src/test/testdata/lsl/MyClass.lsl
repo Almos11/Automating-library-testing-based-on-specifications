@@ -1,7 +1,21 @@
 libsl "1.0.0";
 library MyClass;
 
+typealias Char = char;
 typealias Int = int32;
+typealias String = java.lang.String;
+
+type InfoText {
+    var countWords: Int;
+    var countLetters: Int;
+    var mostFrequentWord: String;
+    var mostFrequentChar: Char;
+}
+
+type Pair {
+    var first: Char;
+    var second: Int;
+}
 
 automaton MyAutomat: String {
     initstate Created;
@@ -80,17 +94,17 @@ fun replaceWords(wordOld: String, wordNew: String) {}
 
 fun stopProcess() {}
 
-fun reverseText() {}
+fun reverseText() : String {}
 
-fun countWords() : Int {}
+// fun countWords() : Int {}
 
-fun countLetters() : Int {}
+// fun countLetters() : Int {}
 
-fun findMostFrequentWord() : Pair<String, Int> {}
+// fun findMostFrequentWord() : Pair {}
 
-fun findMostFrequentChar() : Pair<Char, Int> {}
+// fun findMostFrequentChar() : Pair {}
 
-// fun getInfoText() : InfoText {}
+fun getInfoText(info: InfoText) : InfoText {}
 
 fun toEnd() {}
 

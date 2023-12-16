@@ -4,12 +4,12 @@ import java.io.BufferedWriter
 import java.io.File
 import java.io.FileWriter
 
-data class InfoText(val countWords: Int, val countLetters: Int, val mostFrequentWord: String, val mostFrequentChar: Char) {}
+data class InfoText(var countWords: Int, var countLetters: Int, var mostFrequentWord: String, var mostFrequentChar: Char) {}
 
 data class MyClass(private var state: String, private var text: String) {
     fun toStart() {
         if (state == "Created" || state == "Printed") {
-            state = "Created"
+            state = "Started"
         } else {
             throw RuntimeException("Вы не можете вызывать эту функцию не из состояния 'Created', 'Printed'")
         }
@@ -66,7 +66,7 @@ data class MyClass(private var state: String, private var text: String) {
 
     fun printToConsole() {
         if (state == "ReadyToProcessText" || state == "EndProcessing") {
-            println(text)
+           // println(text)
             state = "Printed"
         } else {
             throw RuntimeException("Вы не можете вызывать эту функцию не из состояния 'ReadyToProcessText', 'EndProcessing'")
@@ -82,7 +82,6 @@ data class MyClass(private var state: String, private var text: String) {
                 bufferedWriter.write(text)
                 bufferedWriter.close()
                 fileWriter.close()
-                println("Строка успешно записана в файл: $filePath")
                 state = "Printed"
             } catch (e: Exception) {
                 println("Ошибка при записи в файл: ${e.message}, попробойти другой файл")
@@ -124,9 +123,10 @@ data class MyClass(private var state: String, private var text: String) {
         }
     }
 
-    fun reverseText() {
+    fun reverseText(): String {
         if (state == "TextProcessing") {
             text = text.reversed()
+            return text
         } else {
             throw RuntimeException("Вы не можете вызывать эту функцию не из состояния 'TextProcessing'")
         }
@@ -172,7 +172,7 @@ data class MyClass(private var state: String, private var text: String) {
         return Pair(mostFrequentEntry?.key, mostFrequentEntry?.value)
     }
 
-    fun getInfoText(): Unit? {
+    fun getInfoText(infoText: InfoText): Any? {
         if (state == "TextProcessing") {
             val mostFrequentWord = findMostFrequentWord().first
             val mostFrequentChar = findMostFrequentChar().first
@@ -180,7 +180,11 @@ data class MyClass(private var state: String, private var text: String) {
             val countWords = countWords()
             return mostFrequentWord?.let {
                 if (mostFrequentChar != null) {
-                    InfoText(countWords, countLetters, it, mostFrequentChar)
+                    infoText.countWords = countWords
+                    infoText.countLetters = countLetters
+                    infoText.mostFrequentWord = it
+                    infoText.mostFrequentChar = mostFrequentChar
+                    return infoText
                 }
             }
         } else {
