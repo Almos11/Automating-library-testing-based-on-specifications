@@ -6,7 +6,7 @@ import java.io.FileWriter
 
 data class InfoText(var countWords: Int, var countLetters: Int, var mostFrequentWord: String, var mostFrequentChar: Char) {}
 
-data class MyClass(private var state: String, private var text: String) {
+data class MyClass(var state: String, private var text: String) {
     fun toStart() {
         if (state == "Created" || state == "Printed") {
             state = "Started"
@@ -108,7 +108,7 @@ data class MyClass(private var state: String, private var text: String) {
     }
 
     fun deleteWords(word: String) {
-        if (state == "CharacterProcessing") {
+        if (state == "WordsProcessing") {
             text = text.replace(word, "")
         } else {
             throw RuntimeException("Вы не можете вызывать эту функцию не из состояния 'WordProcessing'")
@@ -116,7 +116,7 @@ data class MyClass(private var state: String, private var text: String) {
     }
 
     fun replaceWords(wordOld: String, wordNew: String) {
-        if (state == "CharacterProcessing") {
+        if (state == "WordsProcessing") {
             text = text.replace(wordOld, wordNew)
         } else {
             throw RuntimeException("Вы не можете вызывать эту функцию не из состояния 'WordProcessing'")

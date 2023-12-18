@@ -22,7 +22,7 @@ automaton MyAutomat: String {
     state Started;
     state ReadyToProcessText;
     state CharacterProcessing;
-    state WordProcessing;
+    state WordsProcessing;
     state TextProcessing;
     state EndProcessing;
     state Printed;
@@ -41,7 +41,7 @@ automaton MyAutomat: String {
     shift CharacterProcessing -> EndProcessing by stopProcess;
 
    shift WordsProcessing -> self by [deleteWords, replaceWords];
-   shift WordsProcessing -> EndProcessing by stopProcessing;
+   shift WordsProcessing -> EndProcessing by stopProcess;
 
    shift TextProcessing -> self by [reverseText, countWords, countLetters, findMostFrequentWord, findMostFrequentChar, getInfoText];
    shift TextProcessing -> EndProcessing by stopProcess;
@@ -79,6 +79,8 @@ fun sendText(text: String) {}
 fun toWords() {}
 
 fun toText() {}
+
+fun toCharacters() {}
 
 fun printToFile(path: String) {}
 

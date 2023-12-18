@@ -3,7 +3,6 @@ package graph
 import org.jetbrains.research.libsl.LibSL
 import org.jetbrains.research.libsl.nodes.*
 import org.jetbrains.research.libsl.nodes.Function
-import org.jetbrains.research.libsl.nodes.references.FunctionReference
 import java.io.File
 import java.lang.RuntimeException
 import java.util.*
@@ -13,6 +12,7 @@ import node.Node
 class Graph(val path: String) {
     var edges: MutableList<Pair<Int, Int>> = mutableListOf()
     var nodes: MutableList<Node> = mutableListOf()
+    private var allFunctions: MutableList<Function> = mutableListOf()
 
     fun process() {
         getNodes()
@@ -75,10 +75,17 @@ class Graph(val path: String) {
         return myMap
     }
 
+    private fun getUnavailableFunctions() {
+        for (node in nodes) {
+            node.unavailableFunctions = (allFunctions - node.functions.toSet()).toMutableList()
+        }
+    }
+
     private fun getNodes() {
         val libSL = LibSL("")
         val library = libSL.loadFromFile(File(path))
         val automata = library.automata[0]
+        allFunctions = automata.functions.toMutableList()
         val states = automata.states
         val shifts = automata.shifts
         val functionMap = getFunctionMap(automata)
@@ -100,6 +107,7 @@ class Graph(val path: String) {
                 }
             }
         }
+        getUnavailableFunctions()
     }
 
     private fun getEdges() {

@@ -10,5 +10,6 @@ data class Node(
     val to: MutableList<Pair<State, MutableList<FunctionReference>>> = mutableListOf(),
     val functions: MutableList<Function> = mutableListOf(),
     val functionsAndStates: HashMap<String, String> = hashMapOf(),
-    val functionsAndIndex: HashMap<String, Int> = hashMapOf()
+    val functionsAndIndex: HashMap<String, Int> = hashMapOf(),
+    var unavailableFunctions: MutableList<Function> = mutableListOf()
 )

@@ -46,7 +46,6 @@ class TestGraphMyClass {
         assert(myFunction != null)
         val listOfArgs: MutableList<Any> = mutableListOf()
         for (arg in function.args) {
-            println(arg.typeReference)
             listOfArgs.add(getRandomValue(arg.typeReference.name))
         }
 
@@ -70,7 +69,9 @@ class TestGraphMyClass {
         for (arg in function.args) {
             listOfArgs.add(getRandomValue(arg.typeReference.name))
         }
-        assertThrows<RuntimeException> {
+        println(myClass.state)
+        println(myFunction)
+        assertThrows<java.lang.reflect.InvocationTargetException> {
             myFunction?.call(myClass, *listOfArgs.toTypedArray())
         }
 
@@ -90,7 +91,9 @@ class TestGraphMyClass {
                 myEasyTest(newMyClass, indexTo, nodes, used)
             }
         }
-
+        for (function in node.unavailableFunctions) {
+            testUnavailableFunction(myClass, function)
+        }
     }
 
     private fun printArray(array: Array<Int>) {
@@ -139,14 +142,37 @@ class TestGraphMyClass {
         return path.size == distinctCombinedList.size + 1
     }
 
+    private fun printAvailableFunctions(graph: Graph) {
+        for (node in graph.nodes) {
+            println(node.nameState)
+            for (function in node.functions) {
+                print(function.name + " ")
+            }
+            println()
+        }
+    }
+
+    private fun printUnavailableFunctions(graph: Graph) {
+        for (node in graph.nodes) {
+            println(node.nameState)
+            for (function in node.unavailableFunctions) {
+                print(function.name + " ")
+            }
+            println()
+        }
+    }
+
     @Test
     fun easyTestProcess() {
         val graph = getGraph()
+        //printUnavailableFunctions(graph)
+
         val nodes = graph.nodes
         val used = Array(nodes.size) {false}
         val myClass = MyClass("Created", "")
         val root = 0
         myEasyTest(myClass, root, nodes, used)
+
 
     }
 
