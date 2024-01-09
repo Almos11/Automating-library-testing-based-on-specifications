@@ -3,6 +3,7 @@ package data
 import java.io.BufferedWriter
 import java.io.File
 import java.io.FileWriter
+import java.util.*
 
 data class InfoText(var countWords: Int, var countLetters: Int, var mostFrequentWord: String, var mostFrequentChar: Char) {}
 
@@ -155,7 +156,7 @@ data class MyClass(var state: String, private var text: String) {
             val words = text.split("\\s+".toRegex())
             val wordCountMap = mutableMapOf<String, Int>()
             for (word in words) {
-                val normalizedWord = word.toLowerCase()
+                val normalizedWord = word.lowercase(Locale.getDefault())
                 val count = wordCountMap.getOrDefault(normalizedWord, 0)
                 wordCountMap[normalizedWord] = count + 1
             }
