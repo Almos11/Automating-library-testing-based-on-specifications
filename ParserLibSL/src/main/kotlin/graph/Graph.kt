@@ -12,11 +12,60 @@ import node.Node
 class Graph(val path: String) {
     var edges: MutableList<Pair<Int, Int>> = mutableListOf()
     var nodes: MutableList<Node> = mutableListOf()
+    var paths: MutableList<MutableList<Int>> = mutableListOf()
+    var statesName: MutableSet<String> = mutableSetOf()
     private var allFunctions: MutableList<Function> = mutableListOf()
 
     fun process() {
         getNodes()
         getEdges()
+        findAllPaths()
+    }
+
+    private fun printStates() {
+        for (node in nodes) {
+            println(node.nameState)
+        }
+    }
+
+    private fun findAllPaths() {
+        val used = Array(nodes.size) { false }
+        val curPath: MutableList<Int> = mutableListOf()
+        val start = 0
+        curPath.add(start)
+        dfsForFindPaths(used, start, curPath, nodes.size - 1)
+    }
+
+    private fun printPaths() {
+        for (curPath in paths) {
+            printPath(curPath)
+        }
+    }
+
+    private fun printPath(curPath: MutableList<Int>) {
+        for (index in curPath) {
+            print(nodes[index].nameState)
+            print(" ")
+        }
+        println()
+    }
+
+    private fun dfsForFindPaths(used: Array<Boolean>, index: Int, curPath: MutableList<Int>, end: Int) {
+        if (index == end) {
+            paths.add(curPath.toMutableList())
+            return
+        }
+        used[index] = true
+        for (edge in edges) {
+            val indexTo = edge.second
+            if (edge.first == index && !used[indexTo]) {
+                curPath.add(indexTo)
+                dfsForFindPaths(used, indexTo, curPath, end)
+                curPath.removeAt(curPath.size - 1)
+            }
+        }
+        used[index] = false
+
     }
 
     private fun getInitState(states: MutableList<State>) : Int {
@@ -61,8 +110,11 @@ class Graph(val path: String) {
                 }
             }
         }
-        statesAndNodes[curState.name] = nodes.size
-        nodes.add(node);
+        if (!statesName.contains(node.nameState)) {
+            statesAndNodes[curState.name] = nodes.size
+            nodes.add(node)
+            statesName.add(node.nameState)
+        }
         dfs(used, shifts, queueNodes, functionMap, statesAndNodes);
 
     }
@@ -113,10 +165,14 @@ class Graph(val path: String) {
     private fun getEdges() {
         val edges: MutableList<Pair<Int, Int>> = mutableListOf()
         for ((index, node) in nodes.withIndex()) {
+            val visitedStates: MutableSet<Int> = mutableSetOf()
             for (function in node.functions) {
                 val indexTo = node.functionsAndIndex[function.name]
                 if (indexTo != null) {
-                    edges.add(Pair(index, indexTo))
+                    if (!visitedStates.contains(indexTo)) {
+                        visitedStates.add(indexTo)
+                        edges.add(Pair(index, indexTo))
+                    }
                 }
             }
         }

@@ -80,10 +80,39 @@ class TestGraphSimplyMyClassLoader {
         if (indexTo != null) {
             randomWalks(myClass, indexTo, nodes, used)
         }
-
     }
 
-    fun test(pathToLslFile : String = "./src/test/testdata/lsl/SimplyMyClass.lsl", pathToJarFile : String = "/home/vlad/Sasha/NIR/TestJar/SimplyMyClass.jar") {
+    private fun visitPath(myClass: Any, path: MutableList<Int>, nodes: MutableList<Node>) {
+        for (i in 0..<path.size - 1) {
+            val indexFrom = path[i]
+            val indexTo = path[i + 1]
+            val suitableFunctions: MutableList<Function> = mutableListOf()
+            for (function in nodes[indexFrom].functions) {
+                if (nodes[indexFrom].functionsAndIndex[function.name] == indexTo) {
+                    suitableFunctions.add(function)
+                }
+            }
+            val indexFunction = Random.nextInt(0, suitableFunctions.size)
+            testFunction(myClass, suitableFunctions[indexFunction])
+        }
+    }
+
+    private fun visitAllPaths(myClass: Any, paths: MutableList<MutableList<Int>>, nodes: MutableList<Node>) {
+        for (path in paths) {
+            visitPath(myClass, path, nodes)
+        }
+    }
+
+    private fun testSelfFunctions(myClass: Any, node: Node, selfIndex: Int) {
+        for (function in node.functions) {
+            if (node.functionsAndIndex[function.name] == selfIndex) {
+                testFunction(myClass, function)
+            }
+        }
+    }
+
+    private fun testRandomWalks(pathToLslFile : String = "./src/test/testdata/lsl/SimplyMyClass.lsl",
+                                pathToJarFile : String = "/home/vlad/Sasha/NIR/TestJar/SimplyMyClass.jar") {
         val graph = getGraph(pathToLslFile)
         val nodes = graph.nodes
         val edges = graph.edges
@@ -101,12 +130,26 @@ class TestGraphSimplyMyClassLoader {
             e.printStackTrace()
             return
         }
-
     }
 
+    private fun testAllPaths(pathToLslFile : String = "./src/test/testdata/lsl/SimplyMyClass.lsl",
+                             pathToJarFile : String = "/home/vlad/Sasha/NIR/TestJar/SimplyMyClass.jar") {
+        val graph = getGraph(pathToLslFile)
+        val nodes = graph.nodes
+        val paths = graph.paths
+        val fileLoader = FileLoader()
+        try {
+            val myClass = fileLoader.loadFromJar()
+            visitAllPaths(myClass, paths, nodes)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            return
+        }
+    }
     @Test
     fun testLoader() {
-        test()
+        //  testRandomWalks()
+        testAllPaths()
     }
 
 }
