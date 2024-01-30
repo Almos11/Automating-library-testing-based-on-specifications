@@ -1,7 +1,7 @@
 package process
 
 import cycle.Cycle
-import data.SimplyMyClass
+import data.classes.SimplyMyClass
 import graph.Graph
 import node.Node
 import org.jeasy.random.EasyRandom
@@ -9,7 +9,6 @@ import org.jetbrains.research.libsl.nodes.Function
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertDoesNotThrow
 import org.junit.jupiter.api.assertThrows
-import kotlin.reflect.KProperty
 import kotlin.reflect.full.functions
 
 class TestGraphSimplyClass {

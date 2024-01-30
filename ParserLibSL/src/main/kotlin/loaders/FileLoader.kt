@@ -4,13 +4,8 @@ import java.io.File
 import java.net.URLClassLoader
 import kotlin.reflect.full.functions
 
-fun main() {
-    val fileLoader = FileLoader()
-    fileLoader.loadFromJar()
-}
-
 class FileLoader {
-    fun loadFromJar(jarFilePath: String = "/home/vlad/Sasha/NIR/Automating-library-testing-based-on-specifications/ParserLibSL/src/main/kotlin/data/jar/SimplyMyClass.jar", className: String = "SimplyMyClass"): Any {
+    fun loadFromJar(jarFilePath: String, className: String): Any {
         val classLoader = URLClassLoader(arrayOf(File(jarFilePath).toURI().toURL()))
         val loadedClass = classLoader.loadClass(className)
         val instance = loadedClass.getDeclaredConstructor().newInstance()

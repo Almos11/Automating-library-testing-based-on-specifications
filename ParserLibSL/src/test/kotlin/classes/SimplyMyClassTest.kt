@@ -1,6 +1,6 @@
 package classes
 
-import data.SimplyMyClass
+import data.classes.SimplyMyClass
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.Assertions.*
 

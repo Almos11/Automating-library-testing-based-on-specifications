@@ -1,8 +1,8 @@
 package process
 
 import cycle.Cycle
-import data.InfoText
-import data.MyClass
+import data.classes.InfoText
+import data.classes.MyClass
 import graph.Graph
 import node.Node
 import org.jeasy.random.EasyRandom
@@ -10,7 +10,6 @@ import org.jetbrains.research.libsl.nodes.Function
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertDoesNotThrow
 import org.junit.jupiter.api.assertThrows
-import kotlin.reflect.KProperty
 import kotlin.reflect.full.functions
 
 class TestGraphMyClass {
