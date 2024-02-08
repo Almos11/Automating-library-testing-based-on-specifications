@@ -1,0 +1,22 @@
+digraph G {
+
+  created -> sum [label=next];
+  created -> created [label=get_state];
+  
+  sum -> sum [label=get_sum];
+  sum -> sum [label=get_state];
+  sum -> created [label=to_start];
+  sum -> diff [label=next];
+  
+  diff -> diff [label=get_state];
+  diff -> diff [label=get_diff];
+  diff -> created [label=to_start];
+  diff -> division [label=next];
+  
+  division -> division [label=get_state];
+  division -> division [label=get_division];
+  division -> diff [label=back];
+  division -> closed [label=end];
+  
+
+}
